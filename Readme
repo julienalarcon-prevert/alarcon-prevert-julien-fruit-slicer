@@ -1,0 +1,19 @@
+Here is the README.md translated into English, optimized for a professional GitHub repository.🍎 Fruit Ninja Nostalgia: Typing EditionFruit Ninja Nostalgia is a modern reimagining of the legendary mobile game, redesigned as a typing game. Instead of swiping your finger across a screen, you must use your keyboard skills and reflexes to slice through fruits before they fall.🎮 Game ConceptWhile browsing through the app store, a wave of nostalgia hits you as you see Fruit Ninja. This project aims to recreate that frantic experience where every keystroke replaces the blade's edge.Core RulesSlicing: Press the correct keys associated with the fruits to slice them and score points.Combos: Slice multiple fruits in a single sequence to earn progressive combo bonuses ($+1$ for one fruit, $+2$ for three, etc.).Strikes: Every missed fruit costs you a life. Reach 3 strikes, and it’s Game Over.Bombs: Avoid them at all costs! Slicing a bomb ends the game instantly.Ice Cubes: Slice these to freeze time for 3 to 5 seconds.🚀 Features🛠️ Gameplay MechanicsInput System: High-responsiveness keyboard detection for a seamless experience.Dynamic Scoring: Real-time score calculation based on fruit types and combos.Difficulty Scaling: Increasing fruit spawn rates and bomb frequency as the game progresses.🌟 Advanced Features (Bonus)Special Power-ups:Golden Fruit: Grants a massive point boost.Double Score Fruit: Doubles all points earned for a limited time.Shield Fruit: Provides temporary protection against bombs.Game Modes:Classic: Survive as long as possible with 3 strikes.Challenge: Achieve the highest score within a set time limit.Customization: Multilingual support (words in different languages) and difficulty settings.Immersive Audio: Slicing sound effects and ambient background music.🛠️ Installation & SetupClone the repository:Bashgit clone https://github.com/your-name/fruit-slicer.git
+cd fruit-slicer
+Configuration:Install dependencies (if applicable):Bashnpm install
+Run the project:Open index.html in your browser or start the dev server:Bashnpm start
+🧠 Skills DevelopedThis project demonstrates proficiency in:Environment Setup: Configuring a development workflow tailored to the project.UI Development: Building a dynamic, responsive, and engaging user interface.Business Logic: Implementing core game mechanics, collision logic (key/object mapping), and state management.📝 Code OverviewJavaScriptclass Game {
+    constructor() {
+        this.score = 0;
+        this.strikes = 0;
+        this.isFrozen = false;
+    }
+
+    handleInput(key) {
+        
+    }
+
+    spawnEntity() {
+        
+    }
+}
