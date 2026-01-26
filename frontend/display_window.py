@@ -1,7 +1,11 @@
 import pygame
 import os
+import sys
 from ui_utils import draw_button, draw_settings_item
 from settings import TRANSLATIONS, DEFAULT_SETTINGS
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+from backend.game_engine import GameEngine
 
 pygame.init()
 info = pygame.display.Info()
@@ -26,6 +30,8 @@ game_settings = DEFAULT_SETTINGS
 state, progress, running = "LOADING", 0, True
 clock = pygame.time.Clock()
 buttons = {}
+
+engine = GameEngine(sw, sh, bg)
 
 def draw_main(screen, state, progress, mouse_pos, buttons_dict):
     screen.blit(bg, (0, 0))
@@ -75,12 +81,20 @@ def draw_main(screen, state, progress, mouse_pos, buttons_dict):
 
 while running:
     mouse_pos = pygame.mouse.get_pos()
+    
     if state == "LOADING":
         progress += 2
         if progress >= 100: state = "MENU"
 
     for event in pygame.event.get():
-        if event.type == pygame.QUIT: running = False
+        if event.type == pygame.QUIT:
+            running = False
+        
+        if state == "GAME":
+            engine.handle_events(event)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                state = "MENU"
+        
         if event.type == pygame.MOUSEBUTTONDOWN:
             if state == "MENU":
                 if buttons.get('play') and buttons['play'].collidepoint(mouse_pos): state = "GAME"
@@ -95,12 +109,15 @@ while running:
                     game_settings['lang_idx'] = (game_settings['lang_idx'] + 1) % len(game_settings['langs'])
                 if buttons.get('back') and buttons['back'].collidepoint(mouse_pos):
                     state = "MENU"
-            elif state == "GAME":
-                game_font = pygame.font.SysFont("Arial", 50, bold=True)
-                txt = game_font.render("LE JEU COMMENCE !", True, (255, 255, 255))
-                screen.blit(txt, (sw // 2 - txt.get_width() // 2, sh // 2))
 
-    draw_main(screen, state, progress, mouse_pos, buttons)
+    if state == "GAME":
+        engine.update()
+        engine.draw(screen)
+        screen.blit(saber_final, saber_final.get_rect(center=mouse_pos))
+        pygame.display.flip()
+    else:
+        draw_main(screen, state, progress, mouse_pos, buttons)
+    
     clock.tick(60)
 
 pygame.quit()
