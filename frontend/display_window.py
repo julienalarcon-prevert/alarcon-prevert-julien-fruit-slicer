@@ -118,9 +118,10 @@ while running:
         if engine.return_to_menu:
             state = "MENU"
             engine = GameEngine(sw, sh, bg)
-        else:
-            screen.blit(saber_final, saber_final.get_rect(center=mouse_pos))
-            pygame.display.flip()
+            
+        # On affiche le sabre et on flip l'écran systématiquement
+        screen.blit(saber_final, saber_final.get_rect(center=mouse_pos))
+        pygame.display.flip()
     else:
         draw_main(screen, state, progress, mouse_pos, buttons)
     
