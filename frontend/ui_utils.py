@@ -1,6 +1,6 @@
 import pygame
 
-def draw_button(screen, text, x, y, w, h, font, mouse_pos, color=(40, 100, 40)):
+def draw_button(screen, text, x, y, w, h, font, mouse_pos, color=(140, 100, 40)):
     button_rect = pygame.Rect(x, y, w, h)
     is_hovered = button_rect.collidepoint(mouse_pos)
     bg_color = (color[0]+30, color[1]+30, color[2]+30) if is_hovered else color

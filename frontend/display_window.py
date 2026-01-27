@@ -24,7 +24,7 @@ saber_final = pygame.transform.rotate(pygame.transform.smoothscale(saber_raw, (5
 menu_bg_raw = pygame.image.load(os.path.join(ASSETS_PATH, "menu.png")).convert_alpha()
 menu_bg_final = pygame.transform.smoothscale(menu_bg_raw, (700, 700))
 
-title_rect = title_img.get_rect(center=(sw // 2, sh // 2 - 280))
+title_rect = title_img.get_rect(center=(sw // 2, sh // 2 - 110))
 
 game_settings = DEFAULT_SETTINGS
 state, progress, running = "LOADING", 0, True
