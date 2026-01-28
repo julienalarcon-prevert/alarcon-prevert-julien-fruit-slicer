@@ -22,7 +22,7 @@ class GameEngine:
         assets_path = os.path.join(os.path.dirname(__file__), "..", "assets")
         
         self.images = {}
-        monsters = ["Owlet_Monster.png", "Pink_Monster.png", "Dude_Monster.png"]
+        monsters = ["Owlet_Monster.png", "Dude_Monster.png", "Pink_Monster.png"]
         
         self.images["MONSTER"] = pygame.transform.smoothscale(pygame.image.load(os.path.join(assets_path, random.choice(monsters))).convert_alpha(), (80, 80))
         self.images["GLACON"] = pygame.transform.smoothscale(pygame.image.load(os.path.join(assets_path, "glacon.png")).convert_alpha(), (80, 80))
@@ -41,6 +41,8 @@ class GameEngine:
                 if target.char == key_name:
                     target.active = False
                     target.apply_effect(self)
+                    if isinstance(target, Glacon):
+                        self.activate_freeze
                     break
 
     def update(self):
@@ -52,50 +54,39 @@ class GameEngine:
             self.freeze_timer -= 1
             if self.freeze_timer <= 0:
                 self.is_frozen = False
-                
-                for t in self.targets:
-                    if isinstance(t, Monster):
-                        t.vx *= 2
-                        t.vy *= 2
 
         level = self.score // 30
         delay = max(15, self.base_spawn_delay - (level * 10))
 
         self.spawn_timer += 1
-        if self.spawn_timer >= delay:
+        if self.spawn_timer >= delay and self.is_frozen == False:
             prob = random.random()
             
             if prob < 0.1:
                 new_target = Bombe(self.sw, self.sh, self.images["BOMBE"])
-            elif prob < 1:
+            elif prob < 0.2:
                 new_target = Glacon(self.sw, self.sh, self.images["GLACON"])
             else : 
                 new_target = Monster(self.sw, self.sh, self.images["MONSTER"])
-                
-            if self.is_frozen and isinstance(new_target, Monster):
-                new_target.vx /= 2
-                new_target /= 2
             
             self.targets.append(new_target)
             self.spawn_timer = 0
 
         for target in self.targets:
-            target.update()
+            if not self.is_frozen:
+                target.update()
+            
             if target.missed:
-                if isinstance(target, Monster) or isinstance(target, Glacon):
+                if isinstance(target, Monster):
                     self.lives -= 1
+                       
         
         self.targets = [t for t in self.targets if t.active]
 
     def activate_freeze(self):
-        self.is_frozen
+        self.is_frozen = True
         self.freeze_timer = 180
         
-        for t in self.targets:
-            if isinstance (t, Monster):
-                t.vx /= 2
-                t.vy /= 2
-                
         
     def draw(self, screen):
         screen.blit(self.bg_image, (0, 0))

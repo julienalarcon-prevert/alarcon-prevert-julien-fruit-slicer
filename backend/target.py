@@ -50,8 +50,8 @@ class Glacon(Target):
     def apply_effect(self, screen, font):
         super().draw(screen, font, color=(100, 200 , 255))
     
-    #def apply_effect(self, engine):
-        #pygame.time.wait(3000)
+    def apply_effect(self, engine):
+        engine.activate_freeze()
 
 class Bombe(Target):
     def draw(self, screen, font):
