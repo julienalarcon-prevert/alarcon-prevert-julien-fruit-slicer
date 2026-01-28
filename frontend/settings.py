@@ -21,5 +21,5 @@ DEFAULT_SETTINGS = {
     'diff_levels': ["EASY", "NORMAL", "HARD"],
     'diff_idx': 1,
     'langs': list(TRANSLATIONS.keys()),
-    'lang_idx': 1 
+    'lang_idx': 0
 }
