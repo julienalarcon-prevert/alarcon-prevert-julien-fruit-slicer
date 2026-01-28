@@ -1,7 +1,7 @@
 import pygame
 import random
 import os
-from .target import Target, Monster, Glacon, Bombe
+from .target import Target, Monster, Glacon, Bombe, Salmon
 
 class GameEngine:
     def __init__(self, sw, sh, bg_image):
@@ -20,13 +20,15 @@ class GameEngine:
         self.freeze_timer = 0
         
         assets_path = os.path.join(os.path.dirname(__file__), "..", "assets")
+        self.slice_sound = pygame.mixer.Sound(os.path.join(assets_path, "slice.wav"))
         
         self.images = {}
         monsters = ["Owlet_Monster.png", "Dude_Monster.png", "Pink_Monster.png"]
         
-        self.images["MONSTER"] = pygame.transform.smoothscale(pygame.image.load(os.path.join(assets_path, random.choice(monsters))).convert_alpha(), (80, 80))
+        self.monsters_images = [pygame.transform.smoothscale(pygame.image.load(os.path.join(assets_path, random.choice(monsters))).convert_alpha(), (80, 80)) for f in monsters]
         self.images["GLACON"] = pygame.transform.smoothscale(pygame.image.load(os.path.join(assets_path, "glacon.png")).convert_alpha(), (80, 80))
         self.images["BOMBE"] = pygame.transform.smoothscale(pygame.image.load(os.path.join(assets_path, "bombe.png")).convert_alpha(), (80, 80))
+        self.images["SALMON"] = pygame.transform.smoothscale(pygame.image.load(os.path.join(assets_path, "salmon.png")).convert_alpha(), (400, 400))
         
         self.heart_img = pygame.transform.smoothscale(pygame.image.load(os.path.join(assets_path, "heart.png")).convert_alpha(), (40, 40))
 
@@ -41,6 +43,7 @@ class GameEngine:
                 if target.char == key_name:
                     target.active = False
                     target.apply_effect(self)
+                    self.slice_sound.play()
                     if isinstance(target, Glacon):
                         self.activate_freeze
                     break
@@ -64,10 +67,12 @@ class GameEngine:
             
             if prob < 0.1:
                 new_target = Bombe(self.sw, self.sh, self.images["BOMBE"])
+            elif prob < 0.05:
+                new_target = Salmon(self.sw, self.sh, self.images["SALMON"])
             elif prob < 0.2:
                 new_target = Glacon(self.sw, self.sh, self.images["GLACON"])
             else : 
-                new_target = Monster(self.sw, self.sh, self.images["MONSTER"])
+                new_target = Monster(self.sw, self.sh, random.choice(self.monsters_images))
             
             self.targets.append(new_target)
             self.spawn_timer = 0

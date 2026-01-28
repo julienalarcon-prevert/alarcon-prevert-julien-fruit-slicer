@@ -13,7 +13,7 @@ class Target:
         
         self.x = random.randint(100, sw - 100)
         self.y = sh + 50
-        self.gravity = 0.5
+        self.gravity = 0.35
         
         target_height = random.randint(100, sh // 2)
         dist = self.y - target_height
@@ -59,3 +59,10 @@ class Bombe(Target):
     
     def apply_effect(self, engine):
         engine.lives -= 3
+        
+class Salmon(Target):
+    def draw(self, screen, font, color=(255, 255, 255)):
+        super().draw(screen, font, color)
+    
+    def apply_effect(self, engine):
+        engine.live += 1 
