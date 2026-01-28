@@ -64,6 +64,7 @@ def run_game():
                 if state == "MENU":
                     if buttons.get('play') and buttons['play'].collidepoint(mouse_pos):
                         state = "GAME"
+                        pygame.mouse.set_visible(False)
                     elif buttons.get('settings') and buttons['settings'].collidepoint(mouse_pos):
                         state = "SETTINGS"
                     elif buttons.get('quit') and buttons['quit'].collidepoint(mouse_pos):
@@ -86,9 +87,8 @@ def run_game():
             if engine.return_to_menu:
                 state = "MENU"
                 engine = GameEngine(sw, sh, assets['bg'])
-            else:
-                screen.blit(assets['saber'], assets['saber'].get_rect(center=mouse_pos))
-                pygame.display.flip()
+            
+            pygame.display.flip()
         else:
             draw_main(screen, state, progress, mouse_pos, buttons, game_settings, assets, font)
             pygame.display.flip()

@@ -18,6 +18,8 @@ class GameEngine:
         self.return_to_menu = False
         self.is_frozen = False
         self.freeze_timer = 0
+        self.available_keys = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
         
         assets_path = os.path.join(os.path.dirname(__file__), "..", "assets")
         self.slice_sound = pygame.mixer.Sound(os.path.join(assets_path, "slice.wav"))
@@ -62,7 +64,8 @@ class GameEngine:
         delay = max(10, self.base_spawn_delay - (level * 15))
 
         self.spawn_timer += 1
-        if self.spawn_timer >= delay and self.is_frozen == False:
+        
+        if self.spawn_timer >= delay and self.is_frozen == False and self.available_keys:
             prob = random.random()
             
             if prob < 0.1:
@@ -74,8 +77,13 @@ class GameEngine:
             else : 
                 new_target = Monster(self.sw, self.sh, random.choice(self.monsters_images))
             
+            # 🔑 Attribuer une touche unique
+            new_target.char = random.choice(self.available_keys)
+            self.available_keys.remove(new_target.char)
+
             self.targets.append(new_target)
             self.spawn_timer = 0
+
 
         for target in self.targets:
             if not self.is_frozen:
@@ -84,6 +92,9 @@ class GameEngine:
             if target.missed:
                 if isinstance(target, Monster):
                     self.lives -= 1
+                if target.char not in self.available_keys:
+                    self.available_keys.append(target.char)
+                target.active = False
                        
         
         self.targets = [t for t in self.targets if t.active]
