@@ -13,7 +13,7 @@ class GameEngine:
         self.spawn_timer = 0
         self.score = 0
         self.lives = 3
-        self.base_spawn_delay = 60 
+        self.base_spawn_delay = 45 
         self.game_over = False
         self.return_to_menu = False
         self.is_frozen = False
@@ -59,7 +59,7 @@ class GameEngine:
                 self.is_frozen = False
 
         level = self.score // 30
-        delay = max(15, self.base_spawn_delay - (level * 10))
+        delay = max(10, self.base_spawn_delay - (level * 15))
 
         self.spawn_timer += 1
         if self.spawn_timer >= delay and self.is_frozen == False:

@@ -10,15 +10,16 @@ class Target:
         self.original_image = image
         self.image = self.original_image
         self.rect = self.image.get_rect()
+        self.time_scale = 0.8
         
         self.x = random.randint(100, sw - 100)
         self.y = sh + 50
-        self.gravity = 0.35
+        self.gravity = 0.3
         
         target_height = random.randint(100, sh // 2)
         dist = self.y - target_height
         self.vy = -math.sqrt(2 * self.gravity * dist)
-        self.vx = random.uniform(-3, 3)
+        self.vx = random.uniform(-2, 2)
         
         self.angle = 0
         self.rot_speed = random.uniform(-5, 5)
@@ -26,9 +27,9 @@ class Target:
         self.missed = False
         
     def update(self):
-        self.x += self.vx
-        self.y += self.vy
-        self.vy += self.gravity
+        self.x += self.vx * self.time_scale
+        self.y += self.vy * self.time_scale
+        self.vy += self.gravity * self.time_scale
         self.angle += self.rot_speed
         self.image = pygame.transform.rotate(self.original_image, self.angle)
         self.rect = self.image.get_rect(center=(int(self.x), int(self.y)))
