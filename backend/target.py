@@ -66,4 +66,4 @@ class Salmon(Target):
         super().draw(screen, font, color)
     
     def apply_effect(self, engine):
-        engine.live += 1 
+        engine.lives += 1 

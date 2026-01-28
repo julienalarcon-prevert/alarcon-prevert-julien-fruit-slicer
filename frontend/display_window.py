@@ -63,6 +63,8 @@ def run_game():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if state == "MENU":
                     if buttons.get('play') and buttons['play'].collidepoint(mouse_pos):
+                        current_diff = game_settings['diff_levels'][game_settings['diff_idx']]
+                        engine = GameEngine(sw, sh, assets['bg'], difficulty=current_diff)
                         state = "GAME"
                         pygame.mouse.set_visible(False)
                     elif buttons.get('settings') and buttons['settings'].collidepoint(mouse_pos):
@@ -86,7 +88,8 @@ def run_game():
             
             if engine.return_to_menu:
                 state = "MENU"
-                engine = GameEngine(sw, sh, assets['bg'])
+                current_diff = game_settings['diff_levels'][game_settings['diff_idx']]
+                engine = GameEngine(sw, sh, assets['bg'], difficulty=current_diff)
             
             pygame.display.flip()
         else:
