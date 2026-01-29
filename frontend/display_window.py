@@ -14,6 +14,7 @@ class FruitSlicer:
         info = pygame.display.Info()
         self.sw, self.sh = info.current_w, info.current_h
         self.screen = pygame.display.set_mode((self.sw, self.sh))
+        pygame.mouse.set_visible(False)
         pygame.display.set_caption("Fruit Slicer")
         self.clock = pygame.time.Clock()
         
@@ -37,6 +38,7 @@ class FruitSlicer:
             'title_img': pygame.image.load(os.path.join(assets_path, "title.png")).convert_alpha(),
             'menu_bg': pygame.transform.smoothscale(
                 pygame.image.load(os.path.join(assets_path, "menu.png")).convert_alpha(),
+                (700, 700)
             )
         }
         assets['title_rect'] = assets['title_img'].get_rect(center=(self.sw // 2, self.sh // 2 - 110))
@@ -70,33 +72,32 @@ class FruitSlicer:
     def _handle_menu_clicks(self, event, mouse_pos):
         if self.state == "MENU":
             if self.buttons.get('play') and self.buttons['play'].collidepoint(mouse_pos):
-                if self.engine.return_to_menu:
-                    self.state == "GAME"
-                    pygame.mouse.get_visible(False)
+                self._reset_engine()
+                self.state = "GAME"
             elif self.buttons.get('settings') and self.buttons['settings'].collidepoint(mouse_pos):
                 self.state = "SETTINGS"
             elif self.buttons.get('quit') and self.buttons['quit'].collidepoint(mouse_pos):
                 self.running = False
+               
+        elif self.state == "SETTINGS":
+            if self.buttons.get('sound') and self.buttons['sound'].collidepoint(mouse_pos):
+                self.game_settings['sound'] = not self.game_settings['sound']
+            elif self.buttons.get('diff') and self.buttons['diff'].collidepoint(mouse_pos):
+                self.game_settings['diff_idx'] = (self.game_settings['diff_idx'] + 1) % len(self.game_settings['diff_levels'])
+            elif self.buttons.get('lang') and self.buttons['lang'].collidepoint(mouse_pos):
+                self.game_settings['lang_idx'] = (self.game_settings['lang_idx'] + 1) % len(self.game_settings['langs'])
+            elif self.buttons.get('back') and self.buttons['back'].collidepoint(mouse_pos):
+                self.state = "MENU"
                 
-            elif self.state == "SETTINGS":
-                if self.buttons.get('sound') and self.buttons['sound'].collidepoint(mouse_pos):
-                    self.game_settings['sound'] = not self.game_settings['sound']
-                elif self.buttons.get('diff') and self.buttons['diff'].collidepoint(mouse_pos):
-                    self.game_settings['diff_idx'] = (self.game_settings['diff_idx'] + 1) % len(self.game_settings['diff_levels'])
-                elif self.buttons.get('lang') and self.buttons['lang'].collidepoint(mouse_pos):
-                    self.game_settings['lang_idx'] = (self.game_settings['lang_idx'] + 1) % len(self.game_settings['langs'])
-                elif self.buttons.get('back') and self.buttons['back'].collidepoint(mouse_pos):
-                    self.state = "MENU"
-                    
     def _update(self):
         if self.state == "LOADING":
             self.progress += 1
             if self.progress >= 100:
                 self.state = "MENU"
-        
+       
         if self.state == "GAME":
             self.engine.update()
-            
+           
             if self.engine.score > self.current_high_score:
                 self.current_high_score = self.engine.score
             
@@ -123,4 +124,7 @@ class FruitSlicer:
             self._draw()
             self.clock.tick(60)
         pygame.quit()
-        
+
+def run_game():
+    app = FruitSlicer()
+    app.run()        
