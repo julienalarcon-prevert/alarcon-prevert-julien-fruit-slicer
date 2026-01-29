@@ -46,7 +46,7 @@ def run_game():
         mouse_pos = pygame.mouse.get_pos()
         
         if state == "LOADING":
-            progress += 2
+            progress += 1
             if progress >= 100: 
                 state = "MENU"
 

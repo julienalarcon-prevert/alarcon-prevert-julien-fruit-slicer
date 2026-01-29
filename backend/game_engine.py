@@ -10,13 +10,16 @@ class GameEngine:
         self.bg_image = bg_image
         
         if difficulty == "EASY":
-            self.base_spawn_delay = 120 
-            self.speed_multiplier = 0.8  
+            self.base_spawn_delay = 80 
+            self.speed_multiplier = 1.0
         elif difficulty == "HARD":
             self.base_spawn_delay = 45   
-            self.speed_multiplier = 1.2  
+            self.speed_multiplier = 1.2
+        elif difficulty == "IMPOSSIBLE":
+            self.base_spawn_delay = 30
+            self.speed_multiplier = 1.5
         else:
-            self.base_spawn_delay = 80  
+            self.base_spawn_delay = 60  
             self.speed_multiplier = 1.0
 
         self.targets = []
@@ -78,9 +81,9 @@ class GameEngine:
             
             if prob < 0.1:
                 new_target = Bombe(self.sw, self.sh, self.images["BOMBE"])
-            elif prob < 0.15:
+            elif prob < 0.08:
                 new_target = Salmon(self.sw, self.sh, self.images["SALMON"])
-            elif prob < 0.3:
+            elif prob < 0.2:
                 new_target = Glacon(self.sw, self.sh, self.images["GLACON"])
             else : 
                 new_target = Monster(self.sw, self.sh, random.choice(self.monsters_images))
@@ -89,7 +92,7 @@ class GameEngine:
             self.available_keys.remove(new_target.char)
             
             new_target.vx *= self.speed_multiplier
-            new_target.vy *= 0.9
+            new_target.vy *= 1
             
             self.targets.append(new_target)
             self.spawn_timer = 0
@@ -110,13 +113,18 @@ class GameEngine:
     def activate_freeze(self):
         self.is_frozen = True
         self.freeze_timer = 180
+    
+    def activate_salmon(self):
+        self.is_frozen = True
+        self.freeze_timer = 180
+        
         
     def draw(self, screen):
         screen.blit(self.bg_image, (0, 0))
         for t in self.targets: 
             t.draw(screen, self.font)
             
-        for i in range(self.lives): 
+        for i in range(self.lives):
             screen.blit(self.heart_img, (self.sw - 60 - (i * 50), 20))
         
         lvl = (self.score // 30) + 1
@@ -135,3 +143,5 @@ class GameEngine:
             screen.blit(txt, (self.sw//2 - txt.get_width()//2, self.sh//2 - 100))
             screen.blit(score_txt, (self.sw//2 - score_txt.get_width()//2, self.sh//2))
             screen.blit(retry_txt, (self.sw//2 - retry_txt.get_width()//2, self.sh//2 + 80))
+            
+            

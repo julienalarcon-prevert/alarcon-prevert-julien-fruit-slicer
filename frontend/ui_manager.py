@@ -13,7 +13,7 @@ def draw_main(screen, state, progress, mouse_pos, buttons_dict, game_settings, a
         x, y = (sw // 2) - (bar_w // 2), sh - 100
         pygame.draw.rect(screen, (100, 100, 100), (x, y, bar_w, bar_h), 2)
         fill_w = int(bar_w * (progress / 100))
-        pygame.draw.rect(screen, (0, 255, 0), (x, y, fill_w, bar_h))
+        pygame.draw.rect(screen, (140, 100, 40), (x, y, fill_w, bar_h))
         screen.blit(assets['title_img'], assets['title_rect'])
         
     elif state == "MENU":
@@ -43,6 +43,6 @@ def draw_main(screen, state, progress, mouse_pos, buttons_dict, game_settings, a
         buttons_dict['sound'] = draw_settings_item(screen, t['sound_label'], sound_val, set_rect.x, start_y, set_w, row_h, font, mouse_pos)
         buttons_dict['diff'] = draw_settings_item(screen, t['diff_label'], diff_val, set_rect.x, start_y + row_h, set_w, row_h, font, mouse_pos)
         buttons_dict['lang'] = draw_settings_item(screen, t['lang_label'], lang, set_rect.x, start_y + row_h*2, set_w, row_h, font, mouse_pos)
-        buttons_dict['back'] = draw_button(screen, t['save_back'], set_rect.centerx - 125, set_rect.bottom - 90, 250, 60, font, mouse_pos, (50, 120, 200))
+        buttons_dict['back'] = draw_button(screen, t['save_back'], set_rect.centerx - 125, set_rect.bottom - 90, 250, 60, font, mouse_pos, (140, 100, 40))
 
     screen.blit(assets['saber'], assets['saber'].get_rect(center=mouse_pos))

@@ -17,7 +17,7 @@ def draw_settings_item(screen, label, value, x, y, w, h, font, mouse_pos):
     pygame.draw.rect(screen, color, item_rect)
     lbl_surf = font.render(label, True, (60, 60, 60))
     screen.blit(lbl_surf, (x + 20, y + (h - lbl_surf.get_height()) // 2))
-    val_color = (0, 150, 255) if value not in ["OFF", "HARD", "NON", "DIFÍCIL"] else (255, 50, 50)
+    val_color = (140, 100, 40) if value not in ["OFF", "HARD", "IMPOSSIBLE", "NON", "DIFÍCIL"] else (255, 50, 50)
     val_surf = font.render(str(value), True, val_color)
     screen.blit(val_surf, (x + w - val_surf.get_width() - 20, y + (h - val_surf.get_height()) // 2))
     pygame.draw.line(screen, (230, 230, 230), (x + 15, y + h), (x + w - 15, y + h), 1)
