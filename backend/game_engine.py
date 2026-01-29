@@ -2,9 +2,10 @@ import pygame
 import random
 import os
 from .target import Target, Monster, Glacon, Bombe, Salmon
+from .persistance import save_high_score
 
 class GameEngine:
-    def __init__(self, sw, sh, bg_image, difficulty="NORMAL"):
+    def __init__(self, sw, sh, bg_image, difficulty="NORMAL", high_score = 0):
         self.sw = sw
         self.sh = sh
         self.bg_image = bg_image
@@ -16,8 +17,8 @@ class GameEngine:
             self.base_spawn_delay = 45   
             self.speed_multiplier = 1.2
         elif difficulty == "IMPOSSIBLE":
-            self.base_spawn_delay = 30
-            self.speed_multiplier = 1.5
+            self.base_spawn_delay = 20
+            self.speed_multiplier = 2
         else:
             self.base_spawn_delay = 60  
             self.speed_multiplier = 1.0
@@ -26,6 +27,7 @@ class GameEngine:
         self.font = pygame.font.SysFont("Arial", 30, bold=True)
         self.spawn_timer = 0
         self.score = 0
+        self.high_score = high_score
         self.lives = 3
         self.game_over = False
         self.return_to_menu = False
@@ -65,8 +67,12 @@ class GameEngine:
 
     def update(self):
         if self.lives <= 0:
-            self.game_over = True
-            self.loose_sound.play()
+            if not self.game_over:
+                if self.score > self.high_score:
+                    self.high_score = self.score
+                    save_high_score(self.high_score)
+                self.game_over = True
+                self.loose_sound.play()
             return
         
         if self.is_frozen:

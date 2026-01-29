@@ -1,7 +1,7 @@
-from frontend.display_window import run_game
+from frontend.display_window import run
 
 def start():
-    run_game()
+    run()
 
 if __name__ == "__main__":
     start()

@@ -2,7 +2,8 @@ import pygame
 from .ui_utils import draw_button, draw_settings_item
 from .settings import TRANSLATIONS
 
-def draw_main(screen, state, progress, mouse_pos, buttons_dict, game_settings, assets, font):
+
+def draw_main(screen, state, progress, mouse_pos, buttons_dict, game_settings, assets, font, high_score):
     screen.blit(assets['bg'], (0, 0))
     lang = game_settings['langs'][game_settings['lang_idx']]
     t = TRANSLATIONS[lang]
@@ -23,6 +24,8 @@ def draw_main(screen, state, progress, mouse_pos, buttons_dict, game_settings, a
         buttons_dict['play'] = draw_button(screen, t['play'], cx, menu_rect.top + 180, 280, 75, font, mouse_pos)
         buttons_dict['settings'] = draw_button(screen, t['settings'], cx, menu_rect.top + 310, 280, 75, font, mouse_pos)
         buttons_dict['quit'] = draw_button(screen, t['quit'], cx, menu_rect.top + 440, 280, 75, font, mouse_pos)
+        hs_text = font.render(f"BEST: {high_score}", True, (255, 215, 0))
+        screen.blit(hs_text, (sw // 2 - hs_text.get_width() // 2, menu_rect.top + 120))
 
     elif state == "SETTINGS":
         set_w, set_h = 500, 550
