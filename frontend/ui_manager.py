@@ -1,6 +1,6 @@
 import pygame
-from ui_utils import draw_button, draw_settings_item
-from settings import TRANSLATIONS
+from .ui_utils import draw_button, draw_settings_item
+from .settings import TRANSLATIONS
 
 def draw_main(screen, state, progress, mouse_pos, buttons_dict, game_settings, assets, font):
     screen.blit(assets['bg'], (0, 0))
@@ -45,4 +45,16 @@ def draw_main(screen, state, progress, mouse_pos, buttons_dict, game_settings, a
         buttons_dict['lang'] = draw_settings_item(screen, t['lang_label'], lang, set_rect.x, start_y + row_h*2, set_w, row_h, font, mouse_pos)
         buttons_dict['back'] = draw_button(screen, t['save_back'], set_rect.centerx - 125, set_rect.bottom - 90, 250, 60, font, mouse_pos, (140, 100, 40))
 
+    elif state == "PAUSE":
+        set_w, set_h = 500, 550
+        set_rect = pygame.Rect(0, 0, set_w, set_h)
+        set_rect.center = (sw // 2, sh // 2)
+        pygame.draw.rect(screen, (255, 255, 255), set_rect, border_radius=30)
+        
+        header_rect = pygame.Rect(set_rect.x, set_rect.y, set_w, 80)
+        pygame.draw.rect(screen, (240, 240, 240), header_rect, border_top_left_radius=30, border_top_right_radius=30)
+        h_font = pygame.font.SysFont("Arial", 32, bold=True)
+        title_surf = h_font.render(t['config_title'], True, (80, 80, 80))
+        screen.blit(title_surf, (set_rect.centerx - title_surf.get_width()//2, set_rect.top + 25))
+    
     screen.blit(assets['saber'], assets['saber'].get_rect(center=mouse_pos))

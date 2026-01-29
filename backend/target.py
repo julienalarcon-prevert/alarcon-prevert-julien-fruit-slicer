@@ -60,6 +60,7 @@ class Bombe(Target):
     
     def apply_effect(self, engine):
         engine.lives -= 3
+        engine.boom()
         
 class Salmon(Target):
     def draw(self, screen, font, color=(255, 255, 255)):

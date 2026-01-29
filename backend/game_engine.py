@@ -35,6 +35,8 @@ class GameEngine:
 
         assets_path = os.path.join(os.path.dirname(__file__), "..", "assets")
         self.slice_sound = pygame.mixer.Sound(os.path.join(assets_path, "slice.wav"))
+        self.loose_sound = pygame.mixer.Sound(os.path.join(assets_path, "loose.wav"))
+        self.not_slice = pygame.mixer.Sound(os.path.join(assets_path, "not_slice.wav"))
         
         self.images = {}
         monsters = ["Owlet_Monster.png", "Dude_Monster.png", "Pink_Monster.png"]
@@ -64,6 +66,7 @@ class GameEngine:
     def update(self):
         if self.lives <= 0:
             self.game_over = True
+            self.loose_sound.play()
             return
         
         if self.is_frozen:
@@ -104,6 +107,7 @@ class GameEngine:
             if target.missed:
                 if isinstance(target, Monster):
                     self.lives -= 1
+                    self.not_slice.play()
                 if target.char not in self.available_keys:
                     self.available_keys.append(target.char)
                 target.active = False

@@ -58,15 +58,17 @@ def run_game():
                 engine.handle_events(event)
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                     state = "MENU"
-                    engine = GameEngine(sw, sh, assets['bg'])
             
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if state == "MENU":
                     if buttons.get('play') and buttons['play'].collidepoint(mouse_pos):
-                        current_diff = game_settings['diff_levels'][game_settings['diff_idx']]
-                        engine = GameEngine(sw, sh, assets['bg'], difficulty=current_diff)
+                        if engine.return_to_menu:
+                            current_diff = game_settings['diff_levels'][game_settings['diff_idx']]
+                            engine = GameEngine(sw, sh, assets['bg'], difficulty=current_diff)
+                        
                         state = "GAME"
                         pygame.mouse.set_visible(False)
+                    
                     elif buttons.get('settings') and buttons['settings'].collidepoint(mouse_pos):
                         state = "SETTINGS"
                     elif buttons.get('quit') and buttons['quit'].collidepoint(mouse_pos):
