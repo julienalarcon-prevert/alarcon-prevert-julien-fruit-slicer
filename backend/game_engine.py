@@ -15,13 +15,13 @@ class GameEngine:
             self.speed_multiplier = 1.0
         elif difficulty == "HARD":
             self.base_spawn_delay = 45   
-            self.speed_multiplier = 1.2
+            self.speed_multiplier = 1.5
         elif difficulty == "IMPOSSIBLE":
-            self.base_spawn_delay = 20
-            self.speed_multiplier = 2
+            self.base_spawn_delay = 30
+            self.speed_multiplier = 1.5
         else:
             self.base_spawn_delay = 60  
-            self.speed_multiplier = 1.0
+            self.speed_multiplier = 1.2
 
         self.targets = []
         self.font = pygame.font.SysFont("Arial", 30, bold=True)
@@ -45,7 +45,7 @@ class GameEngine:
         
         self.monsters_images = [pygame.transform.smoothscale(pygame.image.load(os.path.join(assets_path, f)).convert_alpha(), (80, 80)) for f in monsters]
         self.images["GLACON"] = pygame.transform.smoothscale(pygame.image.load(os.path.join(assets_path, "glacon.png")).convert_alpha(), (80, 80))
-        self.images["BOMBE"] = pygame.transform.smoothscale(pygame.image.load(os.path.join(assets_path, "bombe.png")).convert_alpha(), (80, 80))
+        self.images["BOMBE"] = pygame.transform.smoothscale(pygame.image.load(os.path.join(assets_path, "bombe.png")).convert_alpha(), (80, 60))
         self.images["SALMON"] = pygame.transform.smoothscale(pygame.image.load(os.path.join(assets_path, "salmon.png")).convert_alpha(), (400, 400))
         self.heart_img = pygame.transform.smoothscale(pygame.image.load(os.path.join(assets_path, "heart.png")).convert_alpha(), (40, 40))
 
@@ -90,7 +90,7 @@ class GameEngine:
             
             if prob < 0.1:
                 new_target = Bombe(self.sw, self.sh, self.images["BOMBE"])
-            elif prob < 0.08:
+            elif prob < 0.09:
                 new_target = Salmon(self.sw, self.sh, self.images["SALMON"])
             elif prob < 0.2:
                 new_target = Glacon(self.sw, self.sh, self.images["GLACON"])

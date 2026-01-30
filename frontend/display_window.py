@@ -91,7 +91,7 @@ class FruitSlicer:
                 
     def _update(self):
         if self.state == "LOADING":
-            self.progress += 1
+            self.progress += 1.5
             if self.progress >= 100:
                 self.state = "MENU"
        
