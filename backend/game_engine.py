@@ -13,15 +13,19 @@ class GameEngine:
         if difficulty == "EASY":
             self.base_spawn_delay = 80 
             self.speed_multiplier = 1.0
+            self.salmon_max_delay = random.randint(50, 100)
         elif difficulty == "HARD":
             self.base_spawn_delay = 45   
             self.speed_multiplier = 1.5
+            self.salmon_max_delay = random.randint(50, 100)
         elif difficulty == "IMPOSSIBLE":
             self.base_spawn_delay = 30
             self.speed_multiplier = 1.5
+            self.salmon_max_delay = random.randint(50, 100)
         else:
             self.base_spawn_delay = 60  
             self.speed_multiplier = 1.2
+            self.salmon_max_delay = random.randint(50, 100)
 
         self.targets = []
         self.font = pygame.font.SysFont("Arial", 30, bold=True)
@@ -32,6 +36,7 @@ class GameEngine:
         self.game_over = False
         self.return_to_menu = False
         self.is_frozen = False
+        self.salmon_counter = 0
         self.freeze_timer = 0
         self.available_keys = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
@@ -86,25 +91,32 @@ class GameEngine:
         self.spawn_timer += 1
         
         if self.spawn_timer >= delay and not self.is_frozen and self.available_keys:
-            prob = random.random()
-            
-            if prob < 0.1:
-                new_target = Bombe(self.sw, self.sh, self.images["BOMBE"])
-            elif prob < 0.09:
-                new_target = Salmon(self.sw, self.sh, self.images["SALMON"])
-            elif prob < 0.2:
-                new_target = Glacon(self.sw, self.sh, self.images["GLACON"])
-            else : 
-                new_target = Monster(self.sw, self.sh, random.choice(self.monsters_images))
-            
-            new_target.char = random.choice(self.available_keys)
-            self.available_keys.remove(new_target.char)
-            
-            new_target.vx *= self.speed_multiplier
-            new_target.vy *= 1
-            
-            self.targets.append(new_target)
             self.spawn_timer = 0
+            self.salmon_counter += 1
+            
+            if self.salmon_counter >= self.salmon_max_delay:
+                new_target = Salmon(self.sw, self.sh, self.images["SALMON"])
+                self.salmon_counter = 0
+            else :
+                prob = random.random()
+            
+                if prob < 0.01:
+                    new_target = Salmon(self.sw, self.sh, self.images["SALMON"])
+                elif prob < 0.15:
+                    new_target = Bombe(self.sw, self.sh, self.images["BOMBE"])
+                elif prob < 0.30:
+                    new_target = Glacon(self.sw, self.sh, self.images["GLACON"])
+                else : 
+                    new_target = Monster(self.sw, self.sh, random.choice(self.monsters_images))
+                
+                new_target.char = random.choice(self.available_keys)
+                self.available_keys.remove(new_target.char)
+                
+                new_target.vx *= self.speed_multiplier
+                new_target.vy *= 1
+                
+                self.targets.append(new_target)
+                self.spawn_timer = 0
 
         for target in self.targets:
             if not self.is_frozen:

@@ -66,5 +66,4 @@ class Salmon(Target):
         super().draw(screen, font, color)
     
     def apply_effect(self, engine):
-        engine.activate_freeze()
         engine.lives += 1

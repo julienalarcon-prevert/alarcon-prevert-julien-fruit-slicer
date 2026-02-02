@@ -1,9 +1,10 @@
 import pygame
 import os
 import sys
-from .ui_manager import draw_main
+from .ui_manager import UIManager
 from .settings import DEFAULT_SETTINGS
 from backend.persistance import load_high_score, save_high_score
+
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 from backend.game_engine import GameEngine
 
@@ -20,15 +21,17 @@ class FruitSlicer:
         
         self.font = pygame.font.SysFont("Arial", 26, bold=True)
         self.assets = self._load_assets()
-        self.game_settings = DEFAULT_SETTINGS.copy()
         
+        self.ui = UIManager(self.assets, self.font)
+        
+        self.game_settings = DEFAULT_SETTINGS.copy()
         self.state = "LOADING"
         self.progress = 0
         self.running = True
         self.buttons = {}
         
         self.current_high_score = load_high_score()
-        self.engine = GameEngine(self.sw, self.sh, self.assets['bg'], high_score=self.current_high_score)
+        self._reset_engine()
         
     def _load_assets(self):
         assets_path = os.path.join(os.path.dirname(__file__), "..", "assets")
@@ -100,6 +103,7 @@ class FruitSlicer:
            
             if self.engine.score > self.current_high_score:
                 self.current_high_score = self.engine.score
+                save_high_score(self.current_high_score)
             
             if self.engine.return_to_menu:
                 self.state = "MENU"
@@ -110,10 +114,9 @@ class FruitSlicer:
         if self.state == "GAME":
             self.engine.draw(self.screen)
         else:
-            draw_main(
+            self.ui.draw(
                 self.screen, self.state, self.progress, mouse_pos,
-                self.buttons, self.game_settings, self.assets,
-                self.font, self.current_high_score
+                self.buttons, self.game_settings, self.current_high_score
             )
         pygame.display.flip()
         
@@ -127,4 +130,4 @@ class FruitSlicer:
 
 def run_game():
     app = FruitSlicer()
-    app.run()        
+    app.run()
